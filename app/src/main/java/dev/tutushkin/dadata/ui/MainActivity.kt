@@ -1,7 +1,8 @@
-package dev.tutushkin.dadata
+package dev.tutushkin.dadata.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import dev.tutushkin.dadata.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
