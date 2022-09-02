@@ -6,4 +6,7 @@
     <string name="auth_button_log_in">Log in</string>
 
     <string name="search_hint_search_string">Enter name or INN</string>
+
+    <string name="details_button_retry">Retry</string>
+    <string name="details_text_status">Organization not found. Please try again later.</string>
 </resources>
