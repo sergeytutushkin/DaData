@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_searchFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_authFragment"
+            app:destination="@id/authFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailsFragment"
@@ -31,5 +34,8 @@
         <argument
             android:name="inn"
             app:argType="string" />
+        <action
+            android:id="@+id/action_detailsFragment_to_authFragment"
+            app:destination="@id/authFragment" />
     </fragment>
 </navigation>
