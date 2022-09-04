@@ -1,4 +1,4 @@
-package dev.tutushkin.dadata
+package dev.tutushkin.dadata.data
 
 import dev.tutushkin.dadata.data.remote.PartyResponse
 import dev.tutushkin.dadata.data.remote.SearchSuggestsResponse
