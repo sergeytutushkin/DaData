@@ -4,8 +4,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import dev.tutushkin.dadata.data.remote.AuthInterceptor
 import dev.tutushkin.dadata.data.remote.DaDataApi
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -20,29 +20,31 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun providesHttpLoggingInterceptor() = HttpLoggingInterceptor()
-        .apply { level = HttpLoggingInterceptor.Level.BODY }
+    fun provideAuthInterceptor(): Interceptor {
+        return Interceptor {
+            val request = it.request().newBuilder()
+            request.addHeader("Authorization", "c8ccd98be6af011018583caede2c5546f1e1954b")
+            val actualRequest = request.build()
+            it.proceed(actualRequest)
+        }
+    }
 
     @Singleton
     @Provides
-    fun providesAuthInterceptor() = AuthInterceptor()
+    fun provideOkHttpClient(
+        authInterceptor: Interceptor
+    ): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(authInterceptor)
+        .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+        .build()
 
     @Singleton
     @Provides
-    fun providesOkHttpClient(
-        authInterceptor: AuthInterceptor,
-        httpLoggingInterceptor: HttpLoggingInterceptor
-    ): OkHttpClient =
-        OkHttpClient.Builder()
-            .addInterceptor(authInterceptor)
-            .addInterceptor(httpLoggingInterceptor)
-            .build()
-
-    @Singleton
-    @Provides
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-        .addConverterFactory(GsonConverterFactory.create())
+    fun provideRetrofit(
+        okHttpClient: OkHttpClient
+    ): Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
         .client(okHttpClient)
         .build()
 
