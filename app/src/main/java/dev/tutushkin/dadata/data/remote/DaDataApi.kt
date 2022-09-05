@@ -7,11 +7,11 @@ interface DaDataApi {
     @GET("/suggest/party")
     suspend fun getSuggestions(
         @Query("query") query: String
-    ): List<SearchSuggestsResponse>
+    ): SearchSuggestsResponse
 
     @GET("/findById/party")
     suspend fun getPartyById(
         @Query("query") query: String,
         @Query("count") count: Int = 1
-    ): List<PartyResponse>
+    ): SuggestsResponse
 }

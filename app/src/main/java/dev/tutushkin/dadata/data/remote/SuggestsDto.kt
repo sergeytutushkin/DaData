@@ -2,12 +2,12 @@ package dev.tutushkin.dadata.data.remote
 
 import com.google.gson.annotations.SerializedName
 
-data class PartyDto(
+data class SuggestsDto(
     @SerializedName("data")
-    val data: List<DataDto>
+    val data: List<PartyDto>
 )
 
-data class DataDto(
+data class PartyDto(
     @SerializedName("inn")
     val inn: String,
 

@@ -17,13 +17,14 @@ import javax.inject.Singleton
 object NetworkModule {
 
     private const val BASE_URL = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/"
+    private const val apiKey = "c8ccd98be6af011018583caede2c5546f1e1954b"
 
     @Singleton
     @Provides
     fun provideAuthInterceptor(): Interceptor {
         return Interceptor {
             val request = it.request().newBuilder()
-            request.addHeader("Authorization", "c8ccd98be6af011018583caede2c5546f1e1954b")
+            request.addHeader("Authorization", apiKey)
             val actualRequest = request.build()
             it.proceed(actualRequest)
         }
