@@ -4,6 +4,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface DaDataApi {
+
     @GET("/suggest/party")
     suspend fun getSuggestions(
         @Query("query") query: String

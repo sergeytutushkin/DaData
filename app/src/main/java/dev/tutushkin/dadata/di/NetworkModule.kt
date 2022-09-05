@@ -17,6 +17,8 @@ import javax.inject.Singleton
 object NetworkModule {
 
     private const val BASE_URL = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/"
+
+    // It's better to hide the api key, but it doesn't matter here (it's demo)
     private const val apiKey = "c8ccd98be6af011018583caede2c5546f1e1954b"
 
     @Singleton
@@ -52,5 +54,4 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideDaDataApi(retrofit: Retrofit): DaDataApi = retrofit.create(DaDataApi::class.java)
-
 }

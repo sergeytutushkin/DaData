@@ -15,5 +15,4 @@ interface SuggestionsModule {
     fun bindSuggestionsRepository(
         impl: SuggestionsRepositoryImpl
     ): SuggestionsRepository
-
 }
