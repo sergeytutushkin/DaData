@@ -7,7 +7,7 @@ data class SearchSuggestsDto(
     val value: String,
 
     @SerializedName("data")
-    val data: List<SuggestionDto>
+    val data: SuggestionDto
 )
 
 data class SuggestionDto(

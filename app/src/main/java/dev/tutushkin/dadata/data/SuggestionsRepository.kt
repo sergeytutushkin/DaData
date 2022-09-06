@@ -1,25 +1,35 @@
 package dev.tutushkin.dadata.data
 
 import dev.tutushkin.dadata.data.remote.DaDataRemoteDataSource
-import dev.tutushkin.dadata.data.remote.PartyDto
-import dev.tutushkin.dadata.data.remote.SearchSuggestsDto
+import dev.tutushkin.dadata.domain.models.Details
+import dev.tutushkin.dadata.domain.models.Search
 import javax.inject.Inject
 
-// TODO Make a mapper DTO to a domain model
 interface SuggestionsRepository {
 
-    suspend fun getSuggestions(query: String): List<SearchSuggestsDto>
+    suspend fun getSuggestions(query: String): List<Search>
 
-    suspend fun getPartyById(query: String, count: Int): PartyDto
+    suspend fun getPartyById(query: String, count: Int): Details
 }
 
 class SuggestionsRepositoryImpl @Inject constructor(
     private val daDataRemoteDataSource: DaDataRemoteDataSource
 ) : SuggestionsRepository {
 
-    override suspend fun getSuggestions(query: String) =
-        daDataRemoteDataSource.getSuggestions(query)
+    override suspend fun getSuggestions(query: String): List<Search> =
+        daDataRemoteDataSource.getSuggestions(query).map {
+            Search(
+                value = it.value,
+                inn = it.data.inn
+            )
+        }
 
-    override suspend fun getPartyById(query: String, count: Int) =
-        daDataRemoteDataSource.getPartyById(query)
+    override suspend fun getPartyById(query: String, count: Int): Details {
+        val details = daDataRemoteDataSource.getPartyById(query)
+        return Details(
+            inn = details.inn,
+            name = details.name.fullWithOpf,
+            address = details.address.value
+        )
+    }
 }
