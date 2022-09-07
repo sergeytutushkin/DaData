@@ -2,9 +2,12 @@ package dev.tutushkin.dadata.ui.search
 
 import dev.tutushkin.dadata.domain.models.Search
 
-data class SearchUiState(
-    val errorMessage: String? = null,
-    val isUserLoggedIn: Boolean = true,
-    val suggestions: List<Search> = emptyList(),
-    val selectedSuggestion: Search? = null
-)
+sealed class SearchUiState {
+    object NotLogged : SearchUiState()
+    object EmptyQuery : SearchUiState()
+    object EmptyResult : SearchUiState()
+    data class NewQuery(val query: String) : SearchUiState()
+    data class SuccessResult(val result: List<Search>) : SearchUiState()
+    data class ErrorResult(val e: Throwable) : SearchUiState()
+    data class SelectSuggestion(val suggestion: Search) : SearchUiState()
+}
