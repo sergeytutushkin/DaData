@@ -26,7 +26,7 @@ object NetworkModule {
     fun provideAuthInterceptor(): Interceptor {
         return Interceptor {
             val request = it.request().newBuilder()
-            request.addHeader("Authorization", apiKey)
+            request.addHeader("Authorization", "Token $apiKey")
             val actualRequest = request.build()
             it.proceed(actualRequest)
         }
