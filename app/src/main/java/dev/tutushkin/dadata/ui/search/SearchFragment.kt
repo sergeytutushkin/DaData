@@ -20,23 +20,27 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var searchAdapter: SearchAdapter
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         _binding = FragmentSearchBinding.bind(view)
 
-        binding.searchInput.addTextChangedListener(textWatcher)
+        searchAdapter = SearchAdapter(requireContext(), R.layout.item_suggestion, mutableListOf())
+        binding.listSuggestions.adapter = searchAdapter
+
+        binding.editSearch.addTextChangedListener(textWatcher)
 
         viewModel.suggestions.observe(viewLifecycleOwner, ::handleSearch)
     }
 
     private fun handleSearch(state: SearchUiState?) {
         when (state) {
-            is SearchUiState.SuccessResult -> Toast.makeText(
-                requireContext(),
-                "Success",
-                Toast.LENGTH_SHORT
-            ).show()
+            is SearchUiState.SuccessResult -> {
+                val list = state.result.map { it.copy() }
+                searchAdapter.addAll(list)
+            }
             SearchUiState.EmptyQuery -> Toast.makeText(
                 requireContext(),
                 "Empty Query",
@@ -77,13 +81,15 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private val textWatcher: TextWatcher = object : TextWatcher {
         private var timer = Timer()
-        private val DELAY: Long = 1000L
+        private val DELAY: Long = 500L
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
 
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
 
         override fun afterTextChanged(s: Editable?) {
+            searchAdapter.clear()
+
             timer.cancel()
             timer = Timer()
             timer.schedule(object : TimerTask() {
