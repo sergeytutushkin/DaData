@@ -53,5 +53,7 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideDaDataApi(retrofit: Retrofit): DaDataApi = retrofit.create(DaDataApi::class.java)
+    fun provideDaDataApi(
+        retrofit: Retrofit
+    ): DaDataApi = retrofit.create(DaDataApi::class.java)
 }
