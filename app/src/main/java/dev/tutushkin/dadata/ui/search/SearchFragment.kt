@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.tutushkin.dadata.R
 import dev.tutushkin.dadata.databinding.FragmentSearchBinding
@@ -28,44 +30,48 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
         searchAdapter = SearchAdapter(requireContext(), R.layout.item_suggestion, mutableListOf())
         binding.listSuggestions.adapter = searchAdapter
+        binding.listSuggestions.onItemClickListener =
+            AdapterView.OnItemClickListener { _, _, position, _ ->
+                val inn = searchAdapter.getItem(position)?.inn ?: ""
+                val action = SearchFragmentDirections.actionSearchFragmentToDetailsFragment(inn)
+                view.findNavController().navigate(action)
+            }
 
         binding.editSearch.addTextChangedListener(textWatcher)
 
         viewModel.suggestions.observe(viewLifecycleOwner, ::handleSearch)
     }
 
-    private fun handleSearch(state: SearchUiState) {
-        when (state) {
-            is SearchUiState.SuccessResult -> {
-                binding.textMessage.visibility = View.INVISIBLE
-                val list = state.result.map { it.copy() }
-                searchAdapter.addAll(list)
-            }
-
-            SearchUiState.TextChanged -> {
-                searchAdapter.clear()
-                binding.textMessage.visibility = View.INVISIBLE
-            }
-
-            SearchUiState.EmptyQuery -> {
-                binding.textMessage.visibility = View.VISIBLE
-                binding.textMessage.text = getText(R.string.search_message_empty)
-            }
-
-            SearchUiState.EmptyResult -> {
-                binding.textMessage.visibility = View.VISIBLE
-                binding.textMessage.text = getText(R.string.search_message_not_found)
-            }
-
-            is SearchUiState.ErrorResult -> {
-                binding.textMessage.visibility = View.VISIBLE
-                binding.textMessage.text = getText(R.string.search_message_error)
-            }
-
-            SearchUiState.NotLogged -> {}
-
-            is SearchUiState.SelectSuggestion -> {}
+    private fun handleSearch(state: SearchUiState) = when (state) {
+        is SearchUiState.SuccessResult -> {
+            binding.textMessage.visibility = View.INVISIBLE
+            val list = state.result.map { it.copy() }
+            searchAdapter.addAll(list)
         }
+
+        SearchUiState.TextChanged -> {
+            searchAdapter.clear()
+            binding.textMessage.visibility = View.INVISIBLE
+        }
+
+        SearchUiState.EmptyQuery -> {
+            binding.textMessage.visibility = View.VISIBLE
+            binding.textMessage.text = getText(R.string.search_message_empty)
+        }
+
+        SearchUiState.EmptyResult -> {
+            binding.textMessage.visibility = View.VISIBLE
+            binding.textMessage.text = getText(R.string.search_message_not_found)
+        }
+
+        is SearchUiState.ErrorResult -> {
+            binding.textMessage.visibility = View.VISIBLE
+            binding.textMessage.text = getText(R.string.search_message_error)
+        }
+
+        SearchUiState.NotLogged -> {}
+
+        is SearchUiState.SelectSuggestion -> {}
     }
 
     private val textWatcher: TextWatcher = object : TextWatcher {
