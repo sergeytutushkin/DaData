@@ -17,9 +17,18 @@ class SearchViewModel @Inject constructor(
     private val _suggestions = MutableLiveData<SearchUiState>()
     val suggestions: LiveData<SearchUiState> = _suggestions
 
+    fun onTextChanged(text: String) {
+        if (text.isEmpty()) {
+            _suggestions.postValue(SearchUiState.EmptyQuery)
+        } else {
+            _suggestions.postValue(SearchUiState.TextChanged)
+        }
+    }
+
     fun onNewQuery(query: String) {
         viewModelScope.launch {
-            _suggestions.postValue(handleQuery(query))
+            val state = handleQuery(query)
+            _suggestions.postValue(state)
         }
     }
 
@@ -33,8 +42,14 @@ class SearchViewModel @Inject constructor(
 
     private suspend fun handleSearchSuggests(query: String): SearchUiState {
         val suggestionsResult = suggestionsRepository.getSuggestions(query)
+
         return if (suggestionsResult.isSuccess) {
-            SearchUiState.SuccessResult(suggestionsResult.getOrThrow())
+            val result = suggestionsResult.getOrThrow()
+            if (result.isEmpty()) {
+                SearchUiState.EmptyResult
+            } else {
+                SearchUiState.SuccessResult(result)
+            }
         } else {
             SearchUiState.ErrorResult(IllegalArgumentException("Search suggestions from server error!"))
         }

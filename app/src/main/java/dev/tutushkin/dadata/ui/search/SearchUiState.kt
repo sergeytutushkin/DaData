@@ -6,7 +6,7 @@ sealed class SearchUiState {
     object NotLogged : SearchUiState()
     object EmptyQuery : SearchUiState()
     object EmptyResult : SearchUiState()
-    data class NewQuery(val query: String) : SearchUiState()
+    object TextChanged : SearchUiState()
     data class SuccessResult(val result: List<Search>) : SearchUiState()
     data class ErrorResult(val e: Throwable) : SearchUiState()
     data class SelectSuggestion(val suggestion: Search) : SearchUiState()
