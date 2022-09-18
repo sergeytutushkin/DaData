@@ -1,14 +1,10 @@
 package dev.tutushkin.dadata.ui.details
 
-data class DetailsUiState(
-    val errorMessage: String? = null,
-    val isUserLoggedIn: Boolean = true,
-    val isLoading: Boolean = true,
-    val details: OrganizationDetails
-)
+import dev.tutushkin.dadata.domain.models.Details
 
-data class OrganizationDetails(
-    val inn: String,
-    val name: String,
-    val address: String
-)
+sealed class DetailsUiState {
+    object NotLogged : DetailsUiState()
+    object Loading : DetailsUiState()
+    data class SuccessResult(val result: List<Details>) : DetailsUiState()
+    data class ErrorResult(val e: Throwable) : DetailsUiState()
+}
