@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.tutushkin.dadata.R
 import dev.tutushkin.dadata.databinding.FragmentSearchBinding
@@ -34,7 +34,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             AdapterView.OnItemClickListener { _, _, position, _ ->
                 val inn = searchAdapter.getItem(position)?.inn ?: ""
                 val action = SearchFragmentDirections.actionSearchFragmentToDetailsFragment(inn)
-                view.findNavController().navigate(action)
+                findNavController().navigate(action)
             }
 
         binding.editSearch.addTextChangedListener(textWatcher)
