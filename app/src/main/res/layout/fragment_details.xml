@@ -7,7 +7,7 @@
     tools:context=".ui.details.DetailsFragment">
 
     <ProgressBar
-        android:id="@+id/spinner"
+        android:id="@+id/progress_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="visible"
@@ -18,7 +18,7 @@
         tools:visibility="invisible" />
 
     <TextView
-        android:id="@+id/status_text"
+        android:id="@+id/text_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/details_text_status"
@@ -30,18 +30,24 @@
         tools:visibility="visible" />
 
     <Button
-        android:id="@+id/retry_button"
+        android:id="@+id/button_retry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/details_button_retry"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/status_text"
+        app:layout_constraintTop_toBottomOf="@id/text_status"
         tools:visibility="visible" />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_organization_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="text_name, text_details_inn, text_address" />
+
     <TextView
-        android:id="@+id/inn_text"
+        android:id="@+id/text_details_inn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="invisible"
@@ -52,24 +58,24 @@
         tools:visibility="visible" />
 
     <TextView
-        android:id="@+id/name_text"
+        android:id="@+id/text_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inn_text"
+        app:layout_constraintTop_toBottomOf="@id/text_details_inn"
         tools:text="@tools:sample/full_names"
         tools:visibility="visible" />
 
     <TextView
-        android:id="@+id/address_text"
+        android:id="@+id/text_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/name_text"
+        app:layout_constraintTop_toBottomOf="@id/text_name"
         tools:text="@tools:sample/cities"
         tools:visibility="visible" />
 
