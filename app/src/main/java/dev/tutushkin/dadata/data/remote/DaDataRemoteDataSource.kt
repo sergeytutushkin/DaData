@@ -6,7 +6,7 @@ interface DaDataRemoteDataSource {
 
     suspend fun getSuggestions(query: String): Result<List<SearchSuggestsDto>>
 
-    suspend fun getPartyById(query: String): PartyDto
+    suspend fun getPartyById(query: String): Result<PartyDto>
 }
 
 class DaDataRemoteDataSourceImpl @Inject constructor(
@@ -17,6 +17,7 @@ class DaDataRemoteDataSourceImpl @Inject constructor(
         daDataApi.getSuggestions(query).suggestions
     }
 
-    override suspend fun getPartyById(query: String) =
-        daDataApi.getPartyById(query).suggestions.first().data.first()
+    override suspend fun getPartyById(query: String) = runCatching {
+        daDataApi.getPartyById(query).suggestions.first().data
+    }
 }

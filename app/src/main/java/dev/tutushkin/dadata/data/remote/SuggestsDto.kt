@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class SuggestsDto(
     @SerializedName("data")
-    val data: List<PartyDto>
+    val data: PartyDto
 )
 
 data class PartyDto(

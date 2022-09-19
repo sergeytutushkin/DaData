@@ -17,6 +17,12 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="invisible" />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="text_status, button_retry" />
+
     <TextView
         android:id="@+id/text_status"
         android:layout_width="wrap_content"

@@ -12,7 +12,6 @@ interface DaDataApi {
 
     @GET("findById/party")
     suspend fun getPartyById(
-        @Query("query") query: String,
-        @Query("count") count: Int = 1
+        @Query("query") query: String
     ): SuggestsResponse
 }

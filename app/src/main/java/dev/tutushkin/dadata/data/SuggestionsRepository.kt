@@ -9,31 +9,31 @@ interface SuggestionsRepository {
 
     suspend fun getSuggestions(query: String): Result<List<Search>>
 
-    suspend fun getPartyById(query: String, count: Int): Details
+    suspend fun getPartyById(query: String): Result<Details>
 }
 
 class SuggestionsRepositoryImpl @Inject constructor(
     private val daDataRemoteDataSource: DaDataRemoteDataSource
 ) : SuggestionsRepository {
 
-    override suspend fun getSuggestions(query: String): Result<List<Search>> =
-        runCatching {
-            daDataRemoteDataSource.getSuggestions(query)
-                .getOrThrow()
-                .map {
-                    Search(
-                        value = it.value,
-                        inn = it.data.inn
-                    )
-                }
-        }
-
-    override suspend fun getPartyById(query: String, count: Int): Details {
-        val details = daDataRemoteDataSource.getPartyById(query)
-        return Details(
-            inn = details.inn,
-            name = details.name.fullWithOpf,
-            address = details.address.value
-        )
+    override suspend fun getSuggestions(query: String) = runCatching {
+        daDataRemoteDataSource.getSuggestions(query)
+            .getOrThrow()
+            .map {
+                Search(
+                    value = it.value,
+                    inn = it.data.inn
+                )
+            }
     }
+
+    override suspend fun getPartyById(query: String) =
+        daDataRemoteDataSource.getPartyById(query)
+            .mapCatching {
+                Details(
+                    inn = it.inn,
+                    name = it.name.fullWithOpf,
+                    address = it.address.value
+                )
+            }
 }
