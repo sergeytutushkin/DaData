@@ -9,5 +9,5 @@ sealed class SearchUiState {
     object TextChanged : SearchUiState()
     data class SuccessResult(val result: List<Search>) : SearchUiState()
     data class ErrorResult(val e: Throwable) : SearchUiState()
-    data class SelectSuggestion(val suggestion: Search) : SearchUiState()
+    data class SelectSuggestion(val position: Int) : SearchUiState()
 }

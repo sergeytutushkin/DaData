@@ -54,4 +54,8 @@ class SearchViewModel @Inject constructor(
             SearchUiState.ErrorResult(IllegalArgumentException("Search suggestions from server error!"))
         }
     }
+
+    fun onSelectSuggestion(position: Int) {
+        _suggestions.postValue(SearchUiState.SelectSuggestion(position))
+    }
 }

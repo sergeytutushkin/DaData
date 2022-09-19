@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.AdapterView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -32,9 +33,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         binding.listSuggestions.adapter = searchAdapter
         binding.listSuggestions.onItemClickListener =
             AdapterView.OnItemClickListener { _, _, position, _ ->
-                val inn = searchAdapter.getItem(position)?.inn ?: ""
-                val action = SearchFragmentDirections.actionSearchFragmentToDetailsFragment(inn)
-                findNavController().navigate(action)
+                viewModel.onSelectSuggestion(position)
             }
 
         binding.editSearch.addTextChangedListener(textWatcher)
@@ -44,34 +43,32 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private fun handleSearch(state: SearchUiState) = when (state) {
         is SearchUiState.SuccessResult -> {
-            binding.textMessage.visibility = View.INVISIBLE
+            showStatus("")
             val list = state.result.map { it.copy() }
             searchAdapter.addAll(list)
         }
-
         SearchUiState.TextChanged -> {
             searchAdapter.clear()
-            binding.textMessage.visibility = View.INVISIBLE
+            showStatus("")
         }
-
-        SearchUiState.EmptyQuery -> {
-            binding.textMessage.visibility = View.VISIBLE
-            binding.textMessage.text = getText(R.string.search_message_empty)
-        }
-
-        SearchUiState.EmptyResult -> {
-            binding.textMessage.visibility = View.VISIBLE
-            binding.textMessage.text = getText(R.string.search_message_not_found)
-        }
-
-        is SearchUiState.ErrorResult -> {
-            binding.textMessage.visibility = View.VISIBLE
-            binding.textMessage.text = getText(R.string.search_message_error)
-        }
-
+        SearchUiState.EmptyQuery -> showStatus(getString(R.string.search_message_empty))
+        SearchUiState.EmptyResult -> showStatus(getString(R.string.search_message_not_found))
+        is SearchUiState.ErrorResult -> showStatus(getString(R.string.search_message_error))
         SearchUiState.NotLogged -> {}
+        is SearchUiState.SelectSuggestion -> {
+            val inn = searchAdapter.getItem(state.position)?.inn ?: ""
+            val action = SearchFragmentDirections.actionSearchFragmentToDetailsFragment(inn)
+            findNavController().navigate(action)
+        }
+    }
 
-        is SearchUiState.SelectSuggestion -> {}
+    private fun showStatus(message: String) {
+        if (message.isEmpty()) {
+            binding.textMessage.isVisible = false
+        } else {
+            binding.textMessage.text = message
+            binding.textMessage.isVisible = true
+        }
     }
 
     private val textWatcher: TextWatcher = object : TextWatcher {
