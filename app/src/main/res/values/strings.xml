@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">DaData</string>
+
+    <string name="auth_hint_login">Enter your phone number</string>
+    <string name="auth_hint_password">Enter password</string>
+    <string name="auth_button_log_in">Log in</string>
+
+    <string name="search_hint_search_string">Start typing name or INN…</string>
+    <string name="search_message_empty">Enter name or INN</string>
+    <string name="search_message_not_found">Organization not found</string>
+    <string name="search_message_error">Something went wrong</string>
+
+    <string name="details_button_retry">Retry</string>
+    <string name="details_text_status">Organization not found. Please try again later.</string>
 </resources>
